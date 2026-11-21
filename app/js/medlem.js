@@ -108,8 +108,7 @@ function tegnMedlemTimeplan() {
 
           <h3 style="font-size: 18px; color: var(--mork-skifer); margin-bottom: 6px;">${time.navn}</h3>
           <p class="meta">
-            ${time.dato} &bull; ${time.klokkeslett}<br>
-            Instruktør: <strong style="color: var(--koks); font-weight: 600;">${time.instruktor}</strong>
+            ${time.dato} &bull; ${time.klokkeslett} &bull; ${time.instruktor}
           </p>
         </div>
 

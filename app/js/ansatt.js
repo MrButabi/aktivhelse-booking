@@ -31,18 +31,18 @@ function tegnAnsattOversikt() {
   container.style.display = "block";
 
   container.innerHTML = `
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
-      <div class="kort" style="padding: 16px 20px;">
-        <p class="meta">Gruppetimer (${valgtAvdeling})</p>
-        <p style="font-size: 26px; font-weight: 700; color: var(--mork-skifer);">${filtrerteTimer.length}</p>
+    <div class="kpi-rad">
+      <div class="kort kpi-kort">
+        <p class="meta">Timer (${valgtAvdeling})</p>
+        <p class="kpi-verdi" style="color: var(--mork-skifer);">${filtrerteTimer.length}</p>
       </div>
-      <div class="kort" style="padding: 16px 20px;">
-        <p class="meta">Totalt påmeldte</p>
-        <p style="font-size: 26px; font-weight: 700; color: var(--salvie-mork);">${totPaameldte} / ${totKapasitet}</p>
+      <div class="kort kpi-kort">
+        <p class="meta">Påmeldte</p>
+        <p class="kpi-verdi" style="color: var(--salvie-mork);">${totPaameldte} / ${totKapasitet}</p>
       </div>
-      <div class="kort" style="padding: 16px 20px;">
-        <p class="meta">Fullbookede timer</p>
-        <p style="font-size: 26px; font-weight: 700; color: var(--varsel-rod);">${fulleTimer}</p>
+      <div class="kort kpi-kort">
+        <p class="meta">Fullbooket</p>
+        <p class="kpi-verdi" style="color: var(--varsel-rod);">${fulleTimer}</p>
       </div>
     </div>
 
@@ -54,36 +54,38 @@ function tegnAnsattOversikt() {
 
         const raderHtml = antall === 0
           ? `<p class="meta" style="margin-top: 10px;">Ingen påmeldte deltakere på denne timen.</p>`
-          : `<table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;">
-              <thead>
-                <tr style="border-bottom: 1px solid var(--ramme); text-align: left; color: var(--tekst-dempet);">
-                  <th style="padding: 6px 8px;">Medlemsnr</th>
-                  <th style="padding: 6px 8px;">Fullt navn</th>
-                  <th style="padding: 6px 8px;">E-post</th>
-                  <th style="padding: 6px 8px; text-align: right;">Handling</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${time.deltakere.map((d, idx) => `
-                  <tr style="border-bottom: 1px solid var(--ramme);">
-                    <td style="padding: 8px; font-weight: 600;">#${d.medlemsnr}</td>
-                    <td style="padding: 8px;">${d.navn}</td>
-                    <td style="padding: 8px; color: var(--tekst-dempet);">${d.epost}</td>
-                    <td style="padding: 8px; text-align: right;">
-                      <button class="btn-avmeld" onclick="fjernDeltaker('${time.id}', ${idx})">Fjern</button>
-                    </td>
+          : `<div class="tabell-wrap">
+              <table>
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--ramme); text-align: left; color: var(--tekst-dempet);">
+                    <th style="padding: 6px 8px;">Nr</th>
+                    <th style="padding: 6px 8px;">Navn</th>
+                    <th class="kol-epost" style="padding: 6px 8px;">E-post</th>
+                    <th style="padding: 6px 8px; text-align: right;">Handling</th>
                   </tr>
-                `).join("")}
-              </tbody>
-            </table>`;
+                </thead>
+                <tbody>
+                  ${time.deltakere.map((d, idx) => `
+                    <tr style="border-bottom: 1px solid var(--ramme);">
+                      <td style="padding: 8px; font-weight: 600;">#${d.medlemsnr}</td>
+                      <td style="padding: 8px;">${d.navn}</td>
+                      <td class="kol-epost" style="padding: 8px; color: var(--tekst-dempet);">${d.epost}</td>
+                      <td style="padding: 8px; text-align: right;">
+                        <button class="btn-avmeld" onclick="fjernDeltaker('${time.id}', ${idx})">Fjern</button>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>`;
 
         return `
           <article class="kort" style="padding: 18px 20px; border-left: 4px solid ${erFull ? "var(--varsel-rod)" : "var(--salvie)"};">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--ramme); padding-bottom: 10px;">
-              <div>
+            <div class="ansatt-kort-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--ramme); padding-bottom: 10px;">
+              <div style="min-width: 0;">
                 <span class="avdeling-tag">Avd. ${time.avdeling}${time.sal ? ` • ${time.sal}` : ""}</span>
                 <h3 style="font-size: 17px; color: var(--mork-skifer);">
-                  ${time.navn} <span style="font-weight: 400; font-size: 13px; color: var(--tekst-dempet);">– ${time.dato} kl. ${time.klokkeslett} (Instruktør: ${time.instruktor})</span>
+                  ${time.navn} <span>– ${time.dato} kl. ${time.klokkeslett} (${time.instruktor})</span>
                 </h3>
               </div>
               <span class="badge ${erFull ? "badge-full" : "badge-ledig"}">

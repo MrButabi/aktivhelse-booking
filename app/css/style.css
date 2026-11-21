@@ -20,7 +20,10 @@
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+html,
 body {
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: var(--bg-skifer);
   color: var(--koks);
   line-height: 1.5;
@@ -82,17 +85,17 @@ body.sentrert-side {
 }
 
 .rolle-valg {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  margin-top: 26px;
+  margin-top: 24px;
 }
 
 .rolle-kort {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
+  gap: 14px;
+  padding: 16px 18px;
   border: 1.5px solid var(--ramme);
   border-radius: 10px;
   text-decoration: none;
@@ -222,6 +225,7 @@ body.sentrert-side {
 /* Container & Kort */
 .container {
   max-width: 1120px;
+  width: 100%;
   margin: 28px auto;
   padding: 0 20px;
 }
@@ -231,7 +235,43 @@ body.sentrert-side {
   border: 1px solid var(--ramme);
   border-radius: 10px;
   padding: 20px;
+  min-width: 0;
+  max-width: 100%;
   box-shadow: 0 2px 8px rgba(24, 34, 31, 0.03);
+}
+
+/* KPI-rad (ansattvisning) */
+.kpi-rad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.kpi-kort {
+  padding: 16px 20px;
+}
+
+.kpi-verdi {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.tabell-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabell-wrap table {
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
 }
 
 .filter-bar {
@@ -254,6 +294,7 @@ body.sentrert-side {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 /* Avdelings-chips */
@@ -264,6 +305,7 @@ body.sentrert-side {
   border-radius: 8px;
   gap: 4px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .chip {
@@ -334,7 +376,7 @@ input:focus {
 /* Timeplan rutenett */
 .timeplan-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 315px), 1fr));
   gap: 18px;
 }
 
@@ -344,6 +386,7 @@ input:focus {
   border-top: 3px solid var(--salvie);
   border-radius: 10px;
   padding: 20px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -449,8 +492,170 @@ input:focus {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .btn-avmeld:hover {
   background-color: var(--varsel-rosa);
+}
+
+/* Mobilvisning (under 640px) */
+@media (max-width: 640px) {
+  /* Kompakt startportal på mobil: to kort ved siden av hverandre */
+  body.sentrert-side {
+    padding: 14px;
+  }
+
+  .portal-kort {
+    padding: 22px 18px;
+    border-radius: 12px;
+  }
+
+  .portal-kort h1 {
+    font-size: 21px;
+    margin-bottom: 6px;
+  }
+
+  .portal-kort .undertittel {
+    font-size: 13px;
+  }
+
+  .rolle-valg {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .rolle-kort {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 14px 12px;
+    min-height: 44px;
+  }
+
+  .rolle-merke {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .rolle-kort h2 {
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .rolle-kort p {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  /* Topplinje og container på mobil */
+  .topbar {
+    padding: 12px 14px;
+  }
+
+  .topbar h1 {
+    font-size: 16px;
+  }
+
+  .brand-ikon {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .container {
+    margin: 16px auto;
+    padding: 0 14px;
+  }
+
+  .kort {
+    padding: 15px;
+    border-radius: 9px;
+  }
+
+  .filter-bar {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .filter-bar h2 {
+    font-size: 18px;
+  }
+
+  /* Avdelings-chips i 4 kolonner */
+  .chip-gruppe {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .chip {
+    padding: 7px 4px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* Beholder fin kortstil under medlem, men litt mer kompakt */
+  .timeplan-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .time-kort {
+    padding: 15px 16px;
+    gap: 12px;
+  }
+
+  /* Tre KPI-bokser på rad øverst i ansattvisning */
+  .kpi-rad {
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .kpi-kort {
+    padding: 10px 8px;
+  }
+
+  .kpi-kort .meta {
+    font-size: 11px;
+  }
+
+  .kpi-verdi {
+    font-size: 17px;
+  }
+
+  .ansatt-kort-header h3 {
+    font-size: 15px !important;
+  }
+
+  .ansatt-kort-header h3 span {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px !important;
+  }
+
+  /* Skjul e-postkolonnen og fjern sideveis scroll på mobil */
+  .tabell-wrap {
+    overflow-x: visible;
+  }
+
+  .tabell-wrap table {
+    min-width: 0;
+    width: 100%;
+    font-size: 12.5px;
+  }
+
+  .kol-epost {
+    display: none !important;
+  }
+
+  .tabell-wrap th,
+  .tabell-wrap td {
+    padding: 6px 5px !important;
+  }
 }
