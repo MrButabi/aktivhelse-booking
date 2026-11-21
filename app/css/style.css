@@ -1,28 +1,51 @@
 :root {
-  --bg-skifer: #F8FAFC;
+  --bg-skifer: #F6F5F2;
   --kort-hvit: #FFFFFF;
-  --ramme: #E2E8F0;
-  --mork-skifer: #1E293B;
-  --koks: #0F172A;
-  --tekst-dempet: #64748B;
-  --salvie: #0D9488;
-  --salvie-mork: #0F766E;
-  --lys-salvie: #CCFBF1;
-  --varsel-rod: #BE123C;
-  --varsel-rosa: #FFE4E6;
+  --ramme: #E5E2DC;
+  --mork-skifer: #18221F;
+  --koks: #111816;
+  --tekst-dempet: #5C6662;
+  --salvie: #1F6F5B;
+  --salvie-mork: #165344;
+  --lys-salvie: #E3F1ED;
+  --varsel-gul: #D97706;
+  --varsel-rod: #B43232;
+  --varsel-rosa: #FBEAEA;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
   background-color: var(--bg-skifer);
   color: var(--koks);
   line-height: 1.5;
+}
+
+/* Merkevare-ikon (AH) */
+.brand-rad {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-ikon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background-color: var(--salvie);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  border-radius: 9px;
+  flex-shrink: 0;
 }
 
 /* Startportal (index.html) */
@@ -37,26 +60,18 @@ body.sentrert-side {
 .portal-kort {
   background: var(--kort-hvit);
   border: 1px solid var(--ramme);
+  border-top: 4px solid var(--salvie);
   border-radius: 14px;
-  max-width: 640px;
+  max-width: 600px;
   width: 100%;
-  padding: 36px;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
-}
-
-.merkelapp {
-  display: inline-block;
-  background: var(--lys-salvie);
-  color: var(--salvie-mork);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 999px;
-  margin-bottom: 12px;
+  padding: 38px;
+  box-shadow: 0 12px 30px rgba(24, 34, 31, 0.06);
 }
 
 .portal-kort h1 {
   font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--mork-skifer);
   margin-bottom: 8px;
 }
@@ -70,7 +85,7 @@ body.sentrert-side {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin: 26px 0 20px;
+  margin-top: 26px;
 }
 
 .rolle-kort {
@@ -87,15 +102,26 @@ body.sentrert-side {
 
 .rolle-kort:hover {
   border-color: var(--salvie);
-  background-color: #F0FDFA;
+  background-color: #F4F9F7;
+  transform: translateY(-1px);
 }
 
-.rolle-ikon {
-  font-size: 28px;
+.rolle-merke {
+  width: 42px;
+  height: 42px;
+  border-radius: 9px;
+  background: var(--lys-salvie);
+  color: var(--salvie-mork);
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .rolle-kort h2 {
-  font-size: 17px;
+  font-size: 16px;
   color: var(--mork-skifer);
   margin-bottom: 2px;
 }
@@ -105,16 +131,11 @@ body.sentrert-side {
   color: var(--tekst-dempet);
 }
 
-.fotnote {
-  font-size: 12px;
-  color: var(--tekst-dempet);
-}
-
-/* Topplinje (medlem.html & ansatt.html) */
+/* Topplinje */
 .topbar {
   background-color: var(--mork-skifer);
   color: #FFFFFF;
-  padding: 18px 24px;
+  padding: 16px 24px;
 }
 
 .topbar-innhold {
@@ -128,12 +149,14 @@ body.sentrert-side {
 }
 
 .topbar h1 {
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .topbar .undertittel {
-  color: #CBD5E1;
-  font-size: 13px;
+  color: #B8C4C0;
+  font-size: 12px;
 }
 
 .rolle-bytte {
@@ -144,9 +167,12 @@ body.sentrert-side {
 }
 
 .aktiv-rolle {
-  font-size: 13px;
-  background: rgba(255, 255, 255, 0.12);
-  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
   border-radius: 6px;
 }
 
@@ -166,21 +192,37 @@ body.sentrert-side {
   background-color: var(--salvie-mork);
 }
 
+.btn-outline {
+  background: var(--kort-hvit);
+  color: var(--mork-skifer);
+  border: 1px solid var(--ramme);
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  border-color: var(--mork-skifer);
+}
+
 .btn-lenke {
-  color: #E2E8F0;
+  color: #D6DFDC;
   font-size: 13px;
   text-decoration: none;
   padding: 6px 8px;
 }
 
 .btn-lenke:hover {
+  color: #FFFFFF;
   text-decoration: underline;
 }
 
-/* Hovedinnhold & Kort */
+/* Container & Kort */
 .container {
   max-width: 1120px;
-  margin: 26px auto;
+  margin: 28px auto;
   padding: 0 20px;
 }
 
@@ -188,7 +230,8 @@ body.sentrert-side {
   background: var(--kort-hvit);
   border: 1px solid var(--ramme);
   border-radius: 10px;
-  padding: 18px 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(24, 34, 31, 0.03);
 }
 
 .filter-bar {
@@ -196,41 +239,70 @@ body.sentrert-side {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 20px;
 }
 
 .filter-bar h2 {
-  font-size: 19px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
   color: var(--mork-skifer);
 }
 
 .filter-kontroll {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-select,
+/* Avdelings-chips */
+.chip-gruppe {
+  display: inline-flex;
+  background: #EBE8E1;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  border: none;
+  background: transparent;
+  color: var(--tekst-dempet);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:hover {
+  color: var(--mork-skifer);
+}
+
+.chip.aktiv {
+  background: var(--kort-hvit);
+  color: var(--mork-skifer);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Skjemafelt */
 input[type="text"],
 input[type="email"] {
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 12px;
   border: 1px solid var(--ramme);
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 14px;
-  background: #FFFFFF;
+  background: #FAF9F7;
   color: var(--koks);
 }
 
-.filter-kontroll select {
-  width: auto;
-}
-
-input:focus,
-select:focus {
+input:focus {
   outline: none;
+  background: #FFFFFF;
   border-color: var(--salvie);
 }
 
@@ -262,26 +334,46 @@ select:focus {
 /* Timeplan rutenett */
 .timeplan-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
   gap: 18px;
 }
 
 .time-kort {
   background: var(--kort-hvit);
   border: 1px solid var(--ramme);
+  border-top: 3px solid var(--salvie);
   border-radius: 10px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(24, 34, 31, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.time-kort:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 34, 31, 0.07);
+}
+
+.time-kort.full {
+  border-top-color: var(--varsel-rod);
+}
+
+.avdeling-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--salvie-mork);
 }
 
 .badge {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 3px 10px;
   border-radius: 999px;
 }
 
@@ -300,29 +392,51 @@ select:focus {
   color: var(--tekst-dempet);
 }
 
-.handlinger {
-  border-top: 1px solid var(--ramme);
-  padding-top: 12px;
+/* Visuell kapasitetsmåler */
+.kapasitet-bar {
+  width: 100%;
+  height: 5px;
+  background: #EBE8E1;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
+.kapasitet-fyll {
+  height: 100%;
+  background: var(--salvie);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.kapasitet-fyll.nesten-full {
+  background: var(--varsel-gul);
+}
+
+.kapasitet-fyll.full {
+  background: var(--varsel-rod);
+}
+
+/* Knapper */
 .btn-paameld {
   width: 100%;
   background-color: var(--mork-skifer);
   color: #FFFFFF;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 7px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
 .btn-paameld:hover:not(:disabled) {
-  background-color: var(--koks);
+  background-color: var(--salvie-mork);
 }
 
 .btn-paameld:disabled {
-  background-color: #94A3B8;
+  background-color: #A3ABA8;
   cursor: not-allowed;
 }
 
@@ -330,8 +444,8 @@ select:focus {
   background: transparent;
   color: var(--varsel-rod);
   border: 1px solid var(--varsel-rod);
-  padding: 4px 10px;
-  border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;

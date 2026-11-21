@@ -10,6 +10,13 @@ function visMelding(tekst, type) {
   boks.timer = setTimeout(() => boks.classList.add("skjult"), 4500);
 }
 
+function velgAvdelingChip(avdeling, knappEl) {
+  document.getElementById("avdeling-filter").value = avdeling;
+  document.querySelectorAll(".chip-gruppe .chip").forEach((c) => c.classList.remove("aktiv"));
+  knappEl.classList.add("aktiv");
+  tegnMedlemTimeplan();
+}
+
 function hentAktivBruker() {
   const lagret = localStorage.getItem(BRUKER_NOKKEL);
   return lagret ? JSON.parse(lagret) : { medlemsnr: "", navn: "", epost: "" };
@@ -53,8 +60,14 @@ function tegnMedlemTimeplan() {
   container.innerHTML = "";
 
   filtrerteTimer.forEach((time) => {
-    const ledige = time.maksKapasitet - time.deltakere.length;
+    const antall = time.deltakere.length;
+    const ledige = time.maksKapasitet - antall;
     const erFull = ledige <= 0;
+    const prosent = Math.min(100, Math.round((antall / time.maksKapasitet) * 100));
+
+    let fyllKlasse = "";
+    if (erFull) fyllKlasse = "full";
+    else if (prosent >= 65) fyllKlasse = "nesten-full";
 
     const minIndex = bruker.medlemsnr || bruker.epost
       ? time.deltakere.findIndex(
@@ -69,7 +82,7 @@ function tegnMedlemTimeplan() {
     if (erPaameldt) {
       knappHtml = `
         <button type="button" class="btn-avmeld" style="width: 100%; padding: 10px; font-size: 14px;" onclick="meldAv('${time.id}', ${minIndex})">
-          ✓ Påmeldt – Klikk for å melde av
+          Påmeldt • Klikk for å melde av
         </button>`;
     } else if (erFull) {
       knappHtml = `
@@ -84,25 +97,26 @@ function tegnMedlemTimeplan() {
     }
 
     container.innerHTML += `
-      <article class="time-kort">
+      <article class="time-kort ${erFull ? "full" : ""}">
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--salvie-mork);">
-              📍 Avd. ${time.avdeling}
-            </span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="avdeling-tag">Avd. ${time.avdeling}${time.sal ? ` • ${time.sal}` : ""}</span>
             <span class="badge ${erFull ? "badge-full" : "badge-ledig"}">
               ${erFull ? "Fullbooket" : `${ledige} av ${time.maksKapasitet} ledige`}
             </span>
           </div>
 
-          <h3 style="font-size: 18px; margin-bottom: 6px;">${time.navn}</h3>
+          <h3 style="font-size: 18px; color: var(--mork-skifer); margin-bottom: 6px;">${time.navn}</h3>
           <p class="meta">
-            📅 ${time.dato} &nbsp;|&nbsp; 🕒 ${time.klokkeslett}<br>
-            👤 Instruktør: ${time.instruktor}
+            ${time.dato} &bull; ${time.klokkeslett}<br>
+            Instruktør: <strong style="color: var(--koks); font-weight: 600;">${time.instruktor}</strong>
           </p>
         </div>
 
-        <div class="handlinger" style="border-top: none; padding-top: 4px;">
+        <div>
+          <div class="kapasitet-bar" title="${antall} av ${time.maksKapasitet} plasser booket">
+            <div class="kapasitet-fyll ${fyllKlasse}" style="width: ${prosent}%;"></div>
+          </div>
           ${knappHtml}
         </div>
       </article>
@@ -114,7 +128,7 @@ function meldPaa(timeId) {
   const bruker = hentAktivBruker();
 
   if (!bruker.medlemsnr || bruker.navn.length < 2 || !bruker.epost.includes("@")) {
-    visMelding("Fyll inn medlemsnummer, fullt navn og e-postadresse øverst på siden først.", "feil");
+    visMelding("Fyll inn medlemsnummer, fullt navn og e-postadresse i medlemskortet øverst først.", "feil");
     document.getElementById("aktiv-medlemsnr").focus();
     return;
   }
@@ -146,7 +160,7 @@ function meldPaa(timeId) {
   });
   Storage.lagreTimer(timer);
   tegnMedlemTimeplan();
-  visMelding(`Påmelding bekreftet: ${bruker.navn} (#${bruker.medlemsnr}) er meldt på ${time.navn}!`, "suksess");
+  visMelding(`Påmelding bekreftet: ${bruker.navn} (#${bruker.medlemsnr}) er meldt på ${time.navn}.`, "suksess");
 }
 
 function meldAv(timeId, index) {

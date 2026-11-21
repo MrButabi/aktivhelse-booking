@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AktivHelse – Ansatt & Admin</title>
+  <title>AktivHelse – Resepsjon &amp; Ansatt</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-innhold">
-      <div>
-        <h1>AktivHelse Treningssenter AS</h1>
-        <p class="undertittel">Ansatt / Admin – Deltakerlister og kapasitet</p>
+      <div class="brand-rad">
+        <span class="brand-ikon">AH</span>
+        <div>
+          <h1>AktivHelse Treningssenter</h1>
+          <p class="undertittel">Resepsjon &amp; Administrasjon</p>
+        </div>
       </div>
       <div class="rolle-bytte">
-        <span class="aktiv-rolle">Rolle: <strong>Ansatt / Admin</strong></span>
-        <a href="medlem.html" class="btn-sekundar">Bytt til Medlem</a>
+        <span class="aktiv-rolle">Ansatt / Admin</span>
+        <a href="medlem.html" class="btn-sekundar">Medlemsvisning</a>
         <a href="index.html" class="btn-lenke">Startside</a>
       </div>
     </div>
@@ -24,18 +27,18 @@
   <main class="container">
     <section class="filter-bar">
       <div>
-        <h2>Kapasitets- og deltakeroversikt</h2>
-        <p class="meta">Sanntidsoversikt over påmeldte medlemmer per gruppetime og avdeling.</p>
+        <h2>Kapasitet og deltakerlister</h2>
+        <p class="meta">Sanntidsoversikt på tvers av Sentrum, Vest og Nord.</p>
       </div>
       <div class="filter-kontroll">
-        <label for="ansatt-avdeling-filter"><strong>Avdeling:</strong></label>
-        <select id="ansatt-avdeling-filter" onchange="tegnAnsattOversikt()">
-          <option value="Alle">Alle avdelinger (Sentrum, Vest, Nord)</option>
-          <option value="Sentrum">Avd. Sentrum</option>
-          <option value="Vest">Avd. Vest</option>
-          <option value="Nord">Avd. Nord</option>
-        </select>
-        <button type="button" class="btn-sekundar" onclick="nullstillDemo()">Nullstill testdata</button>
+        <div class="chip-gruppe" role="group" aria-label="Velg avdeling">
+          <button type="button" class="chip aktiv" onclick="velgAnsattChip('Alle', this)">Alle sentre</button>
+          <button type="button" class="chip" onclick="velgAnsattChip('Sentrum', this)">Sentrum</button>
+          <button type="button" class="chip" onclick="velgAnsattChip('Vest', this)">Vest</button>
+          <button type="button" class="chip" onclick="velgAnsattChip('Nord', this)">Nord</button>
+        </div>
+        <input type="hidden" id="ansatt-avdeling-filter" value="Alle" />
+        <button type="button" class="btn-outline" onclick="nullstillDemo()">Nullstill testdata</button>
       </div>
     </section>
 

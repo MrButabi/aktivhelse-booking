@@ -3,38 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AktivHelse Treningssenter AS – Bookingsystem</title>
+  <title>AktivHelse Treningssenter AS</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="sentrert-side">
   <main class="portal-kort">
-    <span class="merkelapp">Prototype v0.1 • Sopra Steria</span>
-    <h1>AktivHelse Treningssenter AS</h1>
+    <div class="brand-rad" style="margin-bottom: 18px;">
+      <span class="brand-ikon">AH</span>
+      <div>
+        <strong style="font-size: 16px; color: var(--mork-skifer); display: block; line-height: 1.2;">AktivHelse</strong>
+        <span style="font-size: 12px; color: var(--tekst-dempet);">Treningssenter AS</span>
+      </div>
+    </div>
+
+    <h1>Velkommen til AktivHelse</h1>
     <p class="undertittel">
-      Velg visning for å teste timeplan, påmelding og kapasitetsoversikt på tvers av våre tre avdelinger (Sentrum, Vest og Nord).
+      Velg om du vil booke gruppetime som medlem eller åpne resepsjons- og kapasitetsoversikten for ansatte.
     </p>
 
     <div class="rolle-valg">
       <a href="medlem.html" class="rolle-kort">
-        <div class="rolle-ikon">🏃‍♂️</div>
+        <div class="rolle-merke">M</div>
         <div>
-          <h2>Logg inn som Medlem</h2>
-          <p>Se timeplan per avdeling, registrer dine opplysninger og meld deg på eller av gruppetimer.</p>
+          <h2>Medlemsportal</h2>
+          <p>Se ukens gruppetimer på Sentrum, Vest og Nord, og book plass med ett klikk.</p>
         </div>
       </a>
 
       <a href="ansatt.html" class="rolle-kort">
-        <div class="rolle-ikon">📋</div>
+        <div class="rolle-merke" style="background: var(--mork-skifer); color: #FFFFFF;">A</div>
         <div>
-          <h2>Logg inn som Ansatt / Admin</h2>
-          <p>Se nøkkeltall, full deltakerliste per gruppetime, kapasitet og administrer påmeldinger.</p>
+          <h2>Ansatt &amp; Resepsjon</h2>
+          <p>Følg kapasitet i sanntid, se deltakerlister og administrer påmeldinger.</p>
         </div>
       </a>
     </div>
-
-    <p class="fotnote">
-      * Simulert rollevelger uten passord (MVP-avgrensning). Data lagres lokalt i nettleseren (localStorage).
-    </p>
   </main>
 </body>
 </html>

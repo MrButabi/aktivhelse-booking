@@ -8,6 +8,13 @@ function visMelding(tekst, type) {
   boks.timer = setTimeout(() => boks.classList.add("skjult"), 4500);
 }
 
+function velgAnsattChip(avdeling, knappEl) {
+  document.getElementById("ansatt-avdeling-filter").value = avdeling;
+  document.querySelectorAll(".chip-gruppe .chip").forEach((c) => c.classList.remove("aktiv"));
+  knappEl.classList.add("aktiv");
+  tegnAnsattOversikt();
+}
+
 function tegnAnsattOversikt() {
   const alleTimer = Storage.hentTimer();
   const valgtAvdeling = document.getElementById("ansatt-avdeling-filter").value;
@@ -24,18 +31,18 @@ function tegnAnsattOversikt() {
   container.style.display = "block";
 
   container.innerHTML = `
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
-      <div class="kort" style="padding: 16px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px;">
+      <div class="kort" style="padding: 16px 20px;">
         <p class="meta">Gruppetimer (${valgtAvdeling})</p>
-        <p style="font-size: 24px; font-weight: 700; color: var(--mork-skifer);">${filtrerteTimer.length}</p>
+        <p style="font-size: 26px; font-weight: 700; color: var(--mork-skifer);">${filtrerteTimer.length}</p>
       </div>
-      <div class="kort" style="padding: 16px;">
+      <div class="kort" style="padding: 16px 20px;">
         <p class="meta">Totalt påmeldte</p>
-        <p style="font-size: 24px; font-weight: 700; color: var(--salvie-mork);">${totPaameldte} / ${totKapasitet}</p>
+        <p style="font-size: 26px; font-weight: 700; color: var(--salvie-mork);">${totPaameldte} / ${totKapasitet}</p>
       </div>
-      <div class="kort" style="padding: 16px;">
+      <div class="kort" style="padding: 16px 20px;">
         <p class="meta">Fullbookede timer</p>
-        <p style="font-size: 24px; font-weight: 700; color: var(--varsel-rod);">${fulleTimer}</p>
+        <p style="font-size: 26px; font-weight: 700; color: var(--varsel-rod);">${fulleTimer}</p>
       </div>
     </div>
 
@@ -46,7 +53,7 @@ function tegnAnsattOversikt() {
         const erFull = ledige <= 0;
 
         const raderHtml = antall === 0
-          ? `<p class="meta" style="margin-top: 8px;">Ingen påmeldte deltakere på denne timen.</p>`
+          ? `<p class="meta" style="margin-top: 10px;">Ingen påmeldte deltakere på denne timen.</p>`
           : `<table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;">
               <thead>
                 <tr style="border-bottom: 1px solid var(--ramme); text-align: left; color: var(--tekst-dempet);">
@@ -71,12 +78,10 @@ function tegnAnsattOversikt() {
             </table>`;
 
         return `
-          <article class="kort" style="padding: 18px 20px;">
+          <article class="kort" style="padding: 18px 20px; border-left: 4px solid ${erFull ? "var(--varsel-rod)" : "var(--salvie)"};">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--ramme); padding-bottom: 10px;">
               <div>
-                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--salvie-mork);">
-                  📍 Avd. ${time.avdeling}
-                </span>
+                <span class="avdeling-tag">Avd. ${time.avdeling}${time.sal ? ` • ${time.sal}` : ""}</span>
                 <h3 style="font-size: 17px; color: var(--mork-skifer);">
                   ${time.navn} <span style="font-weight: 400; font-size: 13px; color: var(--tekst-dempet);">– ${time.dato} kl. ${time.klokkeslett} (Instruktør: ${time.instruktor})</span>
                 </h3>
