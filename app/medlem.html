@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AktivHelse – Medlemsportal</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-innhold">
+      <div>
+        <h1>AktivHelse Treningssenter AS</h1>
+        <p class="undertittel">Medlemsvisning – Gruppetimer og påmelding</p>
+      </div>
+      <div class="rolle-bytte">
+        <span class="aktiv-rolle">Rolle: <strong>Medlem</strong></span>
+        <a href="ansatt.html" class="btn-sekundar">Bytt til Ansatt/Admin</a>
+        <a href="index.html" class="btn-lenke">Startside</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="kort" style="margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+        <div>
+          <h2 style="font-size: 16px; color: var(--mork-skifer);">Dine medlemsopplysninger</h2>
+          <p class="meta">Fyll inn én gang for rask påmelding og avmelding på gruppetimer.</p>
+        </div>
+        <span id="profil-status" class="badge badge-ledig" style="display: none;">Klar for 1-klikks påmelding</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+        <input type="text" id="aktiv-medlemsnr" placeholder="Medlemsnummer (f.eks. 1010)" oninput="lagreAktivBruker()" />
+        <input type="text" id="aktiv-navn" placeholder="Fullt navn" oninput="lagreAktivBruker()" />
+        <input type="email" id="aktiv-epost" placeholder="E-postadresse" oninput="lagreAktivBruker()" />
+      </div>
+    </section>
+
+    <section class="filter-bar">
+      <div>
+        <h2>Timeplan – Velg avdeling</h2>
+        <p class="meta">Klikk «Meld på time» på ønsket time. Kapasitet oppdateres fortløpende.</p>
+      </div>
+      <div class="filter-kontroll">
+        <label for="avdeling-filter"><strong>Avdeling:</strong></label>
+        <select id="avdeling-filter" onchange="tegnMedlemTimeplan()">
+          <option value="Alle">Alle avdelinger (Sentrum, Vest, Nord)</option>
+          <option value="Sentrum">Avd. Sentrum</option>
+          <option value="Vest">Avd. Vest</option>
+          <option value="Nord">Avd. Nord</option>
+        </select>
+      </div>
+    </section>
+
+    <div id="status-melding" class="melding skjult" role="status"></div>
+    <section id="timeplan-liste" class="timeplan-grid"></section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/medlem.js"></script>
+</body>
+</html>
