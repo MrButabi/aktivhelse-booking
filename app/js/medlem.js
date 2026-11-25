@@ -2,6 +2,108 @@
 
 const BRUKER_NOKKEL = "aktivhelse_aktiv_medlem";
 
+// =========================================================
+// DEL 1: Hjelpefunksjoner for normalisering og tidsberegning
+// =========================================================
+
+function normaliserMedlemId(medlemsnr) {
+  return String(medlemsnr || "").trim().replace(/^#/, "").toLowerCase();
+}
+
+function normaliserEpost(epost) {
+  return String(epost || "").trim().toLowerCase();
+}
+
+// Konverterer "HH:MM" (f.eks. "17:30") til minutter siden midnatt (1050)
+function tidTilMinutter(klokkeslett) {
+  const deler = String(klokkeslett || "").trim().split(":");
+  if (deler.length < 2) return null;
+  const timer = Number(deler[0]);
+  const minutter = Number(deler[1]);
+  if (Number.isNaN(timer) || Number.isNaN(minutter)) return null;
+  return (timer * 60) + minutter;
+}
+
+// Henter [startMin, sluttMin] fra et timeobjekt (støtter startTid/sluttTid eller klokkeslett "HH:MM–HH:MM")
+function hentTidsintervallMinutter(time, standardVarighetMin = 60) {
+  if (time.startTid && time.sluttTid) {
+    const start = tidTilMinutter(time.startTid);
+    const slutt = tidTilMinutter(time.sluttTid);
+    if (start !== null && slutt !== null) return [start, slutt];
+  }
+
+  const tekst = String(time.klokkeslett || "").trim();
+  const deler = tekst.split(/\s*[–-]\s*/).filter(Boolean);
+
+  if (deler.length >= 2) {
+    const start = tidTilMinutter(deler[0]);
+    const slutt = tidTilMinutter(deler[1]);
+    if (start !== null && slutt !== null) return [start, slutt];
+  }
+
+  if (deler.length === 1) {
+    const start = tidTilMinutter(deler[0]);
+    if (start !== null) return [start, start + standardVarighetMin];
+  }
+
+  return null;
+}
+
+// Sjekker om to tidsintervaller [startA, sluttA) og [startB, sluttB) overlapper
+function harTidsOverlapp(startA, sluttA, startB, sluttB) {
+  return startA < sluttB && sluttA > startB;
+}
+
+// =========================================================
+// DEL 2: Sjekk for tidskollisjon og annen avdeling samme dag
+// =========================================================
+
+function sjekkTimeKonflikter(medlem, nyTime, alleTimer) {
+  const medlemNr = normaliserMedlemId(medlem.medlemsnr);
+  const epost = normaliserEpost(medlem.epost);
+  const nyIntervall = hentTidsintervallMinutter(nyTime);
+
+  let kolliderendeTime = null;
+  let annenAvdelingSammeDag = null;
+
+  for (const time of alleTimer) {
+    if (time.id === nyTime.id) continue;
+
+    const deltakerListe = time.deltakere || time.paameldte || [];
+    const erAlleredePaameldt = deltakerListe.some((deltaker) => {
+      const matcherNr = medlemNr && normaliserMedlemId(deltaker.medlemsnr) === medlemNr;
+      const matcherEpost = epost && normaliserEpost(deltaker.epost) === epost;
+      return matcherNr || matcherEpost;
+    });
+
+    if (!erAlleredePaameldt) continue;
+
+    if (time.dato === nyTime.dato) {
+      const eksIntervall = hentTidsintervallMinutter(time);
+
+      // 1. Hard sperre: Overlappende tid på samme dato (på tvers av alle avdelinger)
+      if (
+        nyIntervall &&
+        eksIntervall &&
+        harTidsOverlapp(nyIntervall[0], nyIntervall[1], eksIntervall[0], eksIntervall[1])
+      ) {
+        kolliderendeTime = time;
+        break;
+      }
+
+      // 2. OBS til info: Samme dato, annen avdeling, men uten tidsoverlapp
+      if (time.avdeling !== nyTime.avdeling && !annenAvdelingSammeDag) {
+        annenAvdelingSammeDag = time;
+      }
+    }
+  }
+
+  return {
+    kolliderendeTime,
+    annenAvdelingSammeDag
+  };
+}
+
 function visMelding(tekst, type) {
   const boks = document.getElementById("status-melding");
   boks.textContent = tekst;
@@ -72,8 +174,8 @@ function tegnMedlemTimeplan() {
     const minIndex = bruker.medlemsnr || bruker.epost
       ? time.deltakere.findIndex(
           (d) =>
-            (bruker.medlemsnr && d.medlemsnr.toLowerCase() === bruker.medlemsnr.toLowerCase()) ||
-            (bruker.epost && d.epost.toLowerCase() === bruker.epost.toLowerCase())
+            (bruker.medlemsnr && normaliserMedlemId(d.medlemsnr) === normaliserMedlemId(bruker.medlemsnr)) ||
+            (bruker.epost && normaliserEpost(d.epost) === normaliserEpost(bruker.epost))
         )
       : -1;
     const erPaameldt = minIndex !== -1;
@@ -123,6 +225,10 @@ function tegnMedlemTimeplan() {
   });
 }
 
+// =========================================================
+// DEL 3: Påmelding med kollisjonssperre og OBS-melding
+// =========================================================
+
 function meldPaa(timeId) {
   const bruker = hentAktivBruker();
 
@@ -144,11 +250,26 @@ function meldPaa(timeId) {
 
   const alleredePaameldt = time.deltakere.some(
     (d) =>
-      d.medlemsnr.toLowerCase() === bruker.medlemsnr.toLowerCase() ||
-      d.epost.toLowerCase() === bruker.epost.toLowerCase()
+      normaliserMedlemId(d.medlemsnr) === normaliserMedlemId(bruker.medlemsnr) ||
+      normaliserEpost(d.epost) === normaliserEpost(bruker.epost)
   );
   if (alleredePaameldt) {
     visMelding(`Medlem #${bruker.medlemsnr} er allerede påmeldt ${time.navn}.`, "feil");
+    return;
+  }
+
+  // Sjekk tidskollisjon og annen avdeling samme dag FØR lagring
+  const { kolliderendeTime, annenAvdelingSammeDag } = sjekkTimeKonflikter(
+    bruker,
+    time,
+    timer
+  );
+
+  if (kolliderendeTime) {
+    visMelding(
+      `Kan ikke melde på: Du er allerede påmeldt «${kolliderendeTime.navn}» (${kolliderendeTime.avdeling}) ${kolliderendeTime.dato} kl. ${kolliderendeTime.klokkeslett}.`,
+      "feil"
+    );
     return;
   }
 
@@ -159,7 +280,15 @@ function meldPaa(timeId) {
   });
   Storage.lagreTimer(timer);
   tegnMedlemTimeplan();
-  visMelding(`Påmelding bekreftet: ${bruker.navn} (#${bruker.medlemsnr}) er meldt på ${time.navn}.`, "suksess");
+
+  if (annenAvdelingSammeDag) {
+    visMelding(
+      `Påmelding bekreftet: ${bruker.navn} (#${bruker.medlemsnr}) er meldt på ${time.navn}. OBS til info: Du er også påmeldt «${annenAvdelingSammeDag.navn}» på avd. ${annenAvdelingSammeDag.avdeling} kl. ${annenAvdelingSammeDag.klokkeslett} i dag.`,
+      "info"
+    );
+  } else {
+    visMelding(`Påmelding bekreftet: ${bruker.navn} (#${bruker.medlemsnr}) er meldt på ${time.navn}.`, "suksess");
+  }
 }
 
 function meldAv(timeId, index) {

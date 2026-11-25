@@ -373,6 +373,13 @@ input:focus {
   border: 1px solid var(--varsel-rod);
 }
 
+.melding.info {
+  background-color: #F4F8F7;
+  color: var(--mork-skifer);
+  border: 1px solid var(--salvie);
+  border-left: 4px solid var(--varsel-gul);
+}
+
 /* Timeplan rutenett */
 .timeplan-grid {
   display: grid;

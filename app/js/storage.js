@@ -19,7 +19,7 @@ const STANDARD_TIMER = [
     navn: "Rolig Yoga Flow",
     sal: "Yoga-loft",
     dato: "Man 23. nov",
-    klokkeslett: "18:15–19:15",
+    klokkeslett: "17:15–18:15",
     instruktor: "Sofie Lind",
     maksKapasitet: 3,
     deltakere: [
@@ -46,7 +46,7 @@ const STANDARD_TIMER = [
     navn: "HIIT Intervall",
     sal: "Sal 2",
     dato: "Tir 24. nov",
-    klokkeslett: "18:00–18:45",
+    klokkeslett: "17:30–18:15",
     instruktor: "Marte Solberg",
     maksKapasitet: 8,
     deltakere: []
@@ -56,8 +56,8 @@ const STANDARD_TIMER = [
     avdeling: "Nord",
     navn: "Sirkel & Utholdenhet",
     sal: "Hovedsal",
-    dato: "Ons 25. nov",
-    klokkeslett: "17:30–18:30",
+    dato: "Tir 24. nov",
+    klokkeslett: "16:30–17:30",
     instruktor: "Anders Lie",
     maksKapasitet: 10,
     deltakere: [
