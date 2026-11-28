@@ -106,10 +106,15 @@ function sjekkTimeKonflikter(medlem, nyTime, alleTimer) {
 
 function visMelding(tekst, type) {
   const boks = document.getElementById("status-melding");
+  if (!boks) return;
+
   boks.textContent = tekst;
   boks.className = `melding ${type}`;
+  boks.classList.remove("skjult");
+
   clearTimeout(boks.timer);
-  boks.timer = setTimeout(() => boks.classList.add("skjult"), 4500);
+  const varighet = type === "info" ? 6500 : 4500;
+  boks.timer = setTimeout(() => boks.classList.add("skjult"), varighet);
 }
 
 function velgAvdelingChip(avdeling, knappEl) {

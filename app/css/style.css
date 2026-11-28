@@ -348,13 +348,19 @@ input:focus {
   border-color: var(--salvie);
 }
 
-/* Statusmeldinger */
+/* Statusmeldinger – fast i synsfeltet (viewport) */
 .melding {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 760px);
   padding: 12px 16px;
   border-radius: 8px;
-  margin-bottom: 18px;
   font-size: 14px;
   font-weight: 600;
+  z-index: 1200;
+  box-shadow: 0 8px 24px rgba(17, 24, 22, 0.16);
 }
 
 .melding.skjult {
@@ -508,6 +514,12 @@ input:focus {
 
 /* Mobilvisning (under 640px) */
 @media (max-width: 640px) {
+  .melding {
+    top: 10px;
+    width: calc(100% - 28px);
+    font-size: 13px;
+  }
+
   /* Kompakt startportal på mobil: to kort ved siden av hverandre */
   body.sentrert-side {
     padding: 14px;

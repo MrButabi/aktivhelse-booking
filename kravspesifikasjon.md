@@ -1,9 +1,9 @@
 # Kravspesifikasjon – Digitalt Bookingsystem for AktivHelse Treningssenter AS
 
-**Dato:** 20. november 2026  
+**Dato:** 20. november 2026 (oppdatert etter oppfølging og testing)  
 **Utarbeidet av:** Espen, IT-konsulent, Sopra Steria  
 **Kunde:** AktivHelse Treningssenter AS  
-**Dokumentversjon:** 1.0 (Låst etter kundemøte)  
+**Dokumentversjon:** 1.1 (Oppdatert med tidskollisjonssperre og testtilbakemeldinger)  
 
 ---
 
@@ -16,7 +16,7 @@ Kunden ønsker en første fungerende prototype som demonstrerer hvordan et enkel
 
 ## 2. Målgruppe og brukerbehov
 Løsningen retter seg mot to brukergrupper med ulike behov:
-* **Medlemmer:** Har behov for å raskt velge sin avdeling, se tilgjengelige gruppetimer med ledige plasser, og gjennomføre påmelding og avmelding på få sekunder uten å kontakte resepsjonen.
+* **Medlemmer:** Har behov for å raskt velge sin avdeling, se tilgjengelige gruppetimer med ledige plasser, unngå tidskollisjoner og gjennomføre påmelding og avmelding på få sekunder uten å kontakte resepsjonen.
 * **Ansatte / Admin:** Har behov for sanntidsoversikt over kapasitet og deltakerlister per time og avdeling, samt mulighet til å fjerne påmeldinger ved avbud.
 
 ---
@@ -24,8 +24,8 @@ Løsningen retter seg mot to brukergrupper med ulike behov:
 ## 3. Avgrensning av løsningen
 For å levere en stabil og fungerende prototype innenfor oppdragets rammer er følgende bevisste avgrensninger gjort i samråd med kunden:
 * **Simulert innlogging (rollevelger):** Løsningen benytter ikke ekte brukerkontoer med passord eller sikkerhetsautentisering. Ulike brukerperspektiver demonstreres via en startportal (`index.html`) der brukeren velger mellom visning for *Medlem* (`medlem.html`) og *Ansatt/Admin* (`ansatt.html`).
-* **Tre avdelinger med eksempeldata:** Alle AktivHelse sine tre avdelinger (*Sentrum*, *Vest* og *Nord*) er representert med eksempeldata i én felles løsning, med nedtrekksfilter for avdelingsvalg.
-* **Sperre ved fullbooket time (uten venteliste):** Når maks kapasitet er nådd, sperres nye påmeldinger med tydelig beskjed. Automatisk venteliste er avgrenset til neste versjon (v1.0).
+* **Tre avdelinger med eksempeldata:** Alle AktivHelse sine tre avdelinger (*Sentrum*, *Vest* og *Nord*) er representert med eksempeldata i én felles løsning, med hurtigfilter for avdelingsvalg.
+* **Sperre ved fullbooket time (uten venteliste):** Når maks kapasitet er nådd, sperres nye påmeldinger med tydelig beskjed. Automatisk venteliste og timeadministrasjon er avgrenset til videreutvikling.
 * **Klientbasert datalagring (`localStorage`):** Data lagres lokalt i nettleseren fremfor i en ekstern sky- eller SQL-database. Dette sikrer at påmeldinger ikke forsvinner ved oppdatering av siden (`F5`), uten krav til serveroppsett.
 * **Ingen betalingsløsning:** Medlemskap og betaling håndteres utenfor prototypen.
 
@@ -41,12 +41,13 @@ For å levere en stabil og fungerende prototype innenfor oppdragets rammer er f�
 | **FK-04** | **Avmelding** | Det skal være mulig å fjerne en eksisterende påmelding (både i medlems- og ansattvisning) slik at kapasiteten umiddelbart øker med én ledig plass. | Må ha (MVP) |
 | **FK-05** | **Validering & Duplikatsjekk** | Systemet skal avvise tomme felt eller ugyldig e-postformat, hindre overbooking, og stoppe at samme medlem (sjekket på medlemsnummer og e-post) melder seg på samme time flere ganger. | Må ha (MVP) |
 | **FK-06** | **Rollevisning (Medlem vs. Ansatt)** | Brukeren skal via en enkel rollevelger kunne bytte mellom medlemsperspektiv (booking) og ansattperspektiv (full deltakerliste med kontaktinfo og kapasitetsstatus), samt kunne nullstille testdata. | Må ha (MVP) |
+| **FK-07** | **Sperre for tidskollisjon & OBS-melding** | Systemet skal blokkere påmelding dersom medlemmet allerede er påmeldt en overlappende time samme dag (på tvers av alle avdelinger), og vise en nøytral `OBS`-melding dersom medlemmet har annen time på annen avdeling samme dag uten tidsoverlapp. | Må ha (MVP – Pri 1) |
 
 ---
 
 ## 5. Ikke-funksjonelle krav
-* **IK-01 – Brukervennlighet og tilbakemeldinger:** Grensesnittet skal være enkelt og oversiktlig uten unødvendige steg, og gi tydelige visuelle tilbakemeldinger (bekreftelses- og feilmeldinger) ved alle handlinger.
-* **IK-02 – Dataintegritet og persistens:** Antall påmeldte skal aldri kunne overstige definert maks kapasitet for en time, og registrerte påmeldinger skal bevares ved oppdatering av nettleseren (`F5`) og deles sømløst mellom medlems- og ansattvisning.
+* **IK-01 – Brukervennlighet og tilbakemeldinger:** Grensesnittet skal være enkelt og oversiktlig uten unødvendige steg, og gi tydelige visuelle tilbakemeldinger i synsfeltet (bekreftelses-, info- og feilmeldinger) ved alle handlinger.
+* **IK-02 – Dataintegritet og persistens:** Antall påmeldte skal aldri kunne overstige definert maks kapasitet for en time, tidskollisjoner skal stoppes før lagring, og registrerte påmeldinger skal bevares ved oppdatering av nettleseren (`F5`) og deles mellom medlems- og ansattvisning.
 * **IK-03 – Responsivt design:** Løsningen skal fungere godt på både stasjonær skjerm (resepsjon/ansatte) og mobilskjerm (medlemmer).
 * **IK-04 – Modulær og vedlikeholdbar kode:** Koden skal ha et tydelig skille mellom struktur (HTML), design (CSS), forretningslogikk (`medlem.js` / `ansatt.js`) og datalagring (`storage.js`).
 

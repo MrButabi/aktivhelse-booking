@@ -7,9 +7,14 @@
 
 ## Hovedkonklusjoner og prioriteringer
 * **Kvalitet foran kvantitet:** Kjerneflyten og eksisterende funksjonalitet skal stabiliseres, testes og kvalitetssikres før nye funksjoner bygges på.
-* **Pri 1 (MVP-krav) – Sperre for tidskollisjon:** Et medlem skal ikke kunne melde seg på to gruppetimer som overlapper i tid, uavhengig av hvilken avdeling timene ligger på.
+* **Pri 1 (MVP-krav) – Sperre for tidskollisjon:** Et medlem skal ikke kunne melde seg på to gruppetimer som overlapper i tid, uavhengig av hvilken avdeling timene ligger på. Ved annen time på annen avdeling samme dag *uten* tidsoverlapp vises en nøytral `OBS`-melding (`.melding.info`) uten å blokkere påmeldingen.
 * **Senere / videreutvikling:** Automatisk venteliste (og ventelistevisning for ansatte), administrasjon av gruppetimer/instruktører, oppmøteregistrering samt produksjonsarkitektur (sentral database, autentisering og rollebasert tilgangskontroll).
 * **Dokumentasjon:** Skillet mellom implementert MVP og planlagt videreutvikling skal tydeliggjøres, sammen med tekniske vurderinger rundt `localStorage`, validering, bekreftelse ved destruktive handlinger, UU, personvern og testing.
+
+## Status etter implementering og testing
+* Sperre for tidskollisjon på tvers av avdelinger og `OBS`-melding for annen avdeling samme dag er implementert i `medlem.js` og testet.
+* Statusmeldinger i `style.css`, `medlem.js` og `ansatt.js` er tilpasset fast visning i synsfeltet (`viewport`) slik at meldinger er synlige uten manuell scrolling på både PC og mobil.
+* Testrunden på tvers av medlemsvisning, ansattvisning og mobil på GitHub Pages er gjennomført.
 
 ---
 
